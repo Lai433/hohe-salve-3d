@@ -4,7 +4,7 @@ const difficulties = new Map([
   ["easy", { label: "Leicht", color: Cesium.Color.BLUE }],
   ["intermediate", { label: "Mittelschwer", color: Cesium.Color.RED }],
   ["advanced", { label: "Schwer", color: Cesium.Color.BLACK }],
-  ["novice", { label: "Anfänger", color: Cesium.Color.YELLOW }],
+  ["novice", { label: "Anfänger", color: Cesium.Color.GREEN }],
   ["freeride", { label: "Freeride", color: Cesium.Color.YELLOW }],
   ["other", { label: "Sonstige / ohne Angabe", color: Cesium.Color.YELLOW }],
 ]);
@@ -16,17 +16,19 @@ export async function loadPistes(viewer) {
   panel.innerHTML = `
     <h2 id="object-controls-heading">Objekte auswählen</h2>
     <label><input type="checkbox" data-layer="lines" checked> Pistenlinien</label>
+    <details class="piste-difficulties">
+      <summary id="piste-difficulty-heading">Schwierigkeit der Pistenlinien</summary>
+      <div class="piste-difficulty-options" role="group" aria-labelledby="piste-difficulty-heading">
+        ${Array.from(difficulties, ([value, { label, color }]) => `
+          <label>
+            <input type="checkbox" data-difficulty="${value}" checked>
+            <span class="piste-color" style="background-color: ${color.toCssColorString()}" aria-hidden="true"></span>
+            ${label}
+          </label>
+        `).join("")}
+      </div>
+    </details>
     <label><input type="checkbox" data-layer="polygons" checked> Pistenflächen</label>
-    <fieldset class="piste-difficulties">
-      <legend>Schwierigkeit der Pistenlinien</legend>
-      ${Array.from(difficulties, ([value, { label, color }]) => `
-        <label>
-          <input type="checkbox" data-difficulty="${value}" checked>
-          <span class="piste-color" style="background-color: ${color.toCssColorString()}" aria-hidden="true"></span>
-          ${label}
-        </label>
-      `).join("")}
-    </fieldset>
     <output role="status">GeoJSON wird geladen …</output>
   `;
   document.body.append(panel);

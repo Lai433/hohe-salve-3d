@@ -36,13 +36,20 @@ body {
 }
 
 .piste-difficulties {
-  display: grid;
-  gap: 6px;
-  min-inline-size: 0;
-  margin: 0;
+  margin-inline-start: 24px;
   padding: 8px;
   border: 1px solid #667484;
   border-radius: 4px;
+}
+
+.piste-difficulties summary {
+  cursor: pointer;
+}
+
+.piste-difficulty-options {
+  display: grid;
+  gap: 6px;
+  margin-block-start: 8px;
 }
 
 .piste-color {
