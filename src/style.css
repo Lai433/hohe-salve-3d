@@ -23,6 +23,11 @@ body {
   font: 14px sans-serif;
 }
 
+.piste-controls h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
 .piste-controls label {
   display: flex;
   align-items: center;

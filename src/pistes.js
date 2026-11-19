@@ -9,8 +9,9 @@ function isPiste42(entity, time) {
 export async function loadPistes(viewer) {
   const panel = document.createElement("section");
   panel.className = "piste-controls";
-  panel.setAttribute("aria-label", "Pistenvergleich");
+  panel.setAttribute("aria-labelledby", "object-controls-heading");
   panel.innerHTML = `
+    <h2 id="object-controls-heading">Objekte auswählen</h2>
     <strong>42 · Black Eagle</strong>
     <span class="piste-legend">Gelbe Linie · türkise Fläche (35 %)</span>
     <label><input type="checkbox" data-layer="lines" checked> Pistenlinien</label>
