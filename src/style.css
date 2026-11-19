@@ -35,6 +35,24 @@ body {
   cursor: pointer;
 }
 
+.piste-difficulties {
+  display: grid;
+  gap: 6px;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 8px;
+  border: 1px solid #667484;
+  border-radius: 4px;
+}
+
+.piste-color {
+  width: 12px;
+  height: 12px;
+  flex: none;
+  border: 1px solid #d3dfeb;
+  border-radius: 2px;
+}
+
 .piste-controls output {
   font-size: 12px;
   line-height: 1.5;
