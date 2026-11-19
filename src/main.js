@@ -14,10 +14,11 @@ const summit = {
   cameraTargetHeight: 2000,
 };
 
+const terrain = Cesium.Terrain.fromWorldTerrain({
+  requestVertexNormals: true,
+});
 const viewer = new Cesium.Viewer("cesiumContainer", {
-  terrain: Cesium.Terrain.fromWorldTerrain({
-    requestVertexNormals: true,
-  }),
+  terrain,
   animation: false,
   timeline: false,
 });
@@ -110,6 +111,7 @@ const snowMaterial = new Cesium.Material({
 
 const snowCheckbox = document.createElement("input");
 snowCheckbox.type = "checkbox";
+snowCheckbox.checked = true;
 
 const snowControl = document.createElement("label");
 snowControl.style.cssText = `
@@ -130,9 +132,18 @@ snowControl.style.cssText = `
 snowControl.append(snowCheckbox, "Simulierter Schnee");
 document.body.append(snowControl);
 
-snowCheckbox.addEventListener("change", () => {
+const updateSnow = () => {
+  if (!viewer.scene.terrainProvider) {
+    return;
+  }
   viewer.scene.globe.material = snowCheckbox.checked
     ? snowMaterial
     : undefined;
   viewer.scene.requestRender();
-});
+};
+snowCheckbox.addEventListener("change", updateSnow);
+if (terrain.ready) {
+  updateSnow();
+} else {
+  terrain.readyEvent.addEventListener(updateSnow);
+}

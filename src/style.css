@@ -35,12 +35,6 @@ body {
   cursor: pointer;
 }
 
-.piste-controls button {
-  padding: 6px;
-  cursor: pointer;
-}
-
-.piste-legend,
 .piste-controls output {
   font-size: 12px;
   line-height: 1.5;
