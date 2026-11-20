@@ -1,8 +1,10 @@
 import * as Cesium from "cesium";
-import { buildingColor, styleStationBuildings } from "./stationBuildings.js";
+import { styleBuildings } from "./buildings.js";
 
 const pointColor = Cesium.Color.fromCssColorString("#16a34a");
 const pointOutline = Cesium.Color.fromCssColorString("#14532d");
+const buildingColor = Cesium.Color.fromCssColorString("#603b22");
+const wallColor = Cesium.Color.fromCssColorString("#422819");
 const stationCredit = new Cesium.Credit(
   '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a>',
   true,
@@ -34,7 +36,8 @@ const stationLayers = [
     label: "Stationsgebäude",
     file: "station_polygon.geojson",
     color: buildingColor,
-    configure: styleStationBuildings,
+    configure: (viewer, layer) =>
+      styleBuildings(viewer, layer, { roofColor: buildingColor, wallColor }),
   },
 ];
 

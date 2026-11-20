@@ -1,7 +1,5 @@
 import * as Cesium from "cesium";
 
-export const buildingColor = Cesium.Color.fromCssColorString("#603b22");
-const wallColor = Cesium.Color.fromCssColorString("#422819");
 const buildingHeight = 10;
 
 function prepareRing(hierarchy, entity, entities, samples) {
@@ -28,7 +26,7 @@ function prepareRing(hierarchy, entity, entities, samples) {
   return { entity, hierarchy, firstSample, size, holes };
 }
 
-function createRoof(ring, samples) {
+function createRoof(ring, samples, wallColor) {
   const ground = samples.slice(ring.firstSample, ring.firstSample + ring.size);
   const roof = ground.map(({ longitude, latitude, height }) =>
     Cesium.Cartesian3.fromRadians(longitude, latitude, height + buildingHeight),
@@ -41,17 +39,18 @@ function createRoof(ring, samples) {
   });
   return new Cesium.PolygonHierarchy(
     roof,
-    ring.holes.map((hole) => createRoof(hole, samples)),
+    ring.holes.map((hole) => createRoof(hole, samples, wallColor)),
   );
 }
 
-export function styleStationBuildings(viewer, buildings) {
+export function styleBuildings(viewer, buildings, { roofColor, wallColor }) {
   const time = viewer.clock.currentTime;
   const { entities } = buildings;
   const samples = [];
   const footprints = entities.values.slice().map((entity) => {
-    entity.name = entity.properties?.name_2?.getValue(time) || "Stationsgebäude";
-    entity.polygon.material = buildingColor;
+    entity.name =
+      entity.properties?.name_2?.getValue(time) || entity.name || buildings.name;
+    entity.polygon.material = roofColor;
     entity.polygon.outline = false;
     entity.polygon.classificationType = Cesium.ClassificationType.TERRAIN;
     const hierarchy = entity.polygon.hierarchy.getValue(time);
@@ -72,12 +71,12 @@ export function styleStationBuildings(viewer, buildings) {
         return;
       }
       if (heights.some(({ height }) => !Number.isFinite(height))) {
-        throw new Error("Missing terrain sample for station building");
+        throw new Error("Missing terrain sample for building");
       }
 
       for (const footprint of footprints) {
         const { polygon } = footprint.entity;
-        polygon.hierarchy = createRoof(footprint, heights);
+        polygon.hierarchy = createRoof(footprint, heights, wallColor);
         polygon.perPositionHeight = true;
       }
       viewer.scene.requestRender();
@@ -91,7 +90,7 @@ export function styleStationBuildings(viewer, buildings) {
           entity.wall = undefined;
         }
         viewer.scene.requestRender();
-        console.warn("Failed to sample terrain for station buildings:", error);
+        console.warn(`Failed to sample terrain for ${buildings.name}:`, error);
       }
     }
   };

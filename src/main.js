@@ -4,6 +4,7 @@ import "./style.css";
 import { loadPistes } from "./pistes.js";
 import { loadAerialways } from "./aerialways.js";
 import { loadStations } from "./stations.js";
+import { loadRestaurants } from "./restaurants.js";
 
 const { VITE_CESIUM_ION_TOKEN } = import.meta.env;
 if (VITE_CESIUM_ION_TOKEN) {
@@ -56,7 +57,9 @@ viewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
 
 loadPistes(viewer, document.querySelector("#piste-controls"));
 loadAerialways(viewer, document.querySelector("#aerialway-controls"));
-loadStations(viewer, document.querySelector(".object-controls"));
+const objectControls = document.querySelector(".object-controls");
+loadStations(viewer, objectControls);
+loadRestaurants(viewer, objectControls);
 
 const snowline = 200;
 const fullSnowHeight = 1200;

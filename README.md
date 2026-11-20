@@ -28,7 +28,7 @@ Navigate to `localhost:5173`. For the built version navigate to `localhost:4173`
 
 ## Map data
 
-The lift station data in `public/data/station_punkte.geojson` and `public/data/station_polygon.geojson` contain OpenStreetMap data © OpenStreetMap contributors, available under the [Open Database License (ODbL)](https://opendatacommons.org/licenses/odbl/1-0/).
+The lift station files (`public/data/station_punkte.geojson` and `public/data/station_polygon.geojson`) and the restaurant file (`public/data/restaurant.geojson`) contain OpenStreetMap data © OpenStreetMap contributors, available under the [Open Database License (ODbL)](https://opendatacommons.org/licenses/odbl/1-0/).
 
 ## Available scripts
 
