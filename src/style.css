@@ -92,6 +92,7 @@ body {
   height: 11px;
   flex: none;
   border-radius: 50%;
+  background-color: var(--piste-color);
 }
 
 .object-controls output {
