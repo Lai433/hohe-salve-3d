@@ -8,7 +8,7 @@ body {
   width: 100%;
 }
 
-.piste-controls {
+.object-controls {
   position: fixed;
   top: 58px;
   left: 12px;
@@ -16,6 +16,8 @@ body {
   display: grid;
   gap: 10px;
   width: min(270px, calc(100vw - 48px));
+  max-height: calc(100vh - 94px);
+  overflow: auto;
   padding: 12px;
   border-radius: 4px;
   background: #20242ceF;
@@ -23,30 +25,35 @@ body {
   font: 14px sans-serif;
 }
 
-.piste-controls h2 {
+.object-controls h2 {
   margin: 0;
   font-size: 16px;
 }
 
-.piste-controls label {
+.layer-controls {
+  display: grid;
+  gap: 10px;
+}
+
+.object-controls label {
   display: flex;
   align-items: center;
   gap: 8px;
   cursor: pointer;
 }
 
-.piste-difficulties {
+.layer-filters {
   margin-inline-start: 24px;
   padding: 8px;
   border: 1px solid #667484;
   border-radius: 4px;
 }
 
-.piste-difficulties summary {
+.layer-filters summary {
   cursor: pointer;
 }
 
-.piste-difficulty-options {
+.layer-filter-options {
   display: grid;
   gap: 6px;
   margin-block-start: 8px;
@@ -60,7 +67,13 @@ body {
   border-radius: 2px;
 }
 
-.piste-controls output {
+.aerialway-line {
+  width: 20px;
+  flex: none;
+  border-top: 3px dashed currentColor;
+}
+
+.object-controls output {
   font-size: 12px;
   line-height: 1.5;
   color: #d3dfeb;

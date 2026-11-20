@@ -9,16 +9,12 @@ const difficulties = new Map([
   ["other", { label: "Sonstige / ohne Angabe", color: Cesium.Color.YELLOW }],
 ]);
 
-export async function loadPistes(viewer) {
-  const panel = document.createElement("section");
-  panel.className = "piste-controls";
-  panel.setAttribute("aria-labelledby", "object-controls-heading");
+export async function loadPistes(viewer, panel) {
   panel.innerHTML = `
-    <h2 id="object-controls-heading">Objekte auswählen</h2>
     <label><input type="checkbox" data-layer="lines" checked> Pistenlinien</label>
-    <details class="piste-difficulties">
+    <details class="layer-filters">
       <summary id="piste-difficulty-heading">Schwierigkeit der Pistenlinien</summary>
-      <div class="piste-difficulty-options" role="group" aria-labelledby="piste-difficulty-heading">
+      <div class="layer-filter-options" role="group" aria-labelledby="piste-difficulty-heading">
         ${Array.from(difficulties, ([value, { label, color }]) => `
           <label>
             <input type="checkbox" data-difficulty="${value}" checked>
@@ -31,7 +27,6 @@ export async function loadPistes(viewer) {
     <label><input type="checkbox" data-layer="polygons" checked> Pistenflächen</label>
     <output role="status">GeoJSON wird geladen …</output>
   `;
-  document.body.append(panel);
   const status = panel.querySelector("output");
   try {
     const [polygons, lines] = await Promise.all([
