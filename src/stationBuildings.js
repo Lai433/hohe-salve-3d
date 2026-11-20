@@ -1,8 +1,8 @@
 import * as Cesium from "cesium";
 
-export const buildingColor = Cesium.Color.fromCssColorString("#bd8151");
-const wallColor = Cesium.Color.fromCssColorString("#70462d");
-const buildingHeight = 3;
+export const buildingColor = Cesium.Color.fromCssColorString("#603b22");
+const wallColor = Cesium.Color.fromCssColorString("#422819");
+const buildingHeight = 10;
 
 function prepareRing(hierarchy, entity, entities, samples) {
   const vertices = hierarchy.positions;
