@@ -26,6 +26,10 @@ npm run preview
 
 Navigate to `localhost:5173`. For the built version navigate to `localhost:4173`
 
+## Map data
+
+The lift station points in `public/data/station_punkte.geojson` contain OpenStreetMap data © OpenStreetMap contributors, available under the [Open Database License (ODbL)](https://opendatacommons.org/licenses/odbl/1-0/).
+
 ## Available scripts
 
 - `npm run eslint` - Lint this project

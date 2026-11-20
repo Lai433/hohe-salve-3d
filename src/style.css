@@ -53,6 +53,10 @@ body {
   cursor: pointer;
 }
 
+.station-controls {
+  margin-inline-start: 0;
+}
+
 .layer-filter-options {
   display: grid;
   gap: 6px;

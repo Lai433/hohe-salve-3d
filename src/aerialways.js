@@ -8,8 +8,6 @@ const aerialwayStyles = new Map([
   ["other", { label: "Sonstige / ohne Angabe", color: "#365848" }],
 ]);
 
-const endpointOutline = Cesium.Color.fromCssColorString("#052e16");
-
 export async function loadAerialways(viewer, panel) {
   panel.innerHTML = `
     <label><input type="checkbox" data-layer="aerialways" checked> Seilbahnen und Lifte</label>
@@ -33,7 +31,7 @@ export async function loadAerialways(viewer, panel) {
     const time = viewer.clock.currentTime;
     const types = new Set();
     const lineTypes = new Map();
-    for (const entity of [...aerialways.entities.values]) {
+    for (const entity of aerialways.entities.values) {
       if (!entity.polyline) {
         entity.show = false;
         continue;
@@ -41,31 +39,13 @@ export async function loadAerialways(viewer, panel) {
       const value = entity.properties?.aerialway?.getValue(time);
       const type = aerialwayStyles.has(value) ? value : "other";
       const { label, color } = aerialwayStyles.get(type);
-      const lineColor = Cesium.Color.fromCssColorString(color);
       types.add(type);
       lineTypes.set(entity, type);
       entity.name = entity.properties?.name?.getValue(time) || label;
       entity.polyline.width = 6;
-      entity.polyline.material = lineColor;
+      entity.polyline.material = Cesium.Color.fromCssColorString(color);
       entity.polyline.classificationType = Cesium.ClassificationType.TERRAIN;
       entity.polyline.zIndex = 2;
-
-      const positions = entity.polyline.positions.getValue(time);
-      for (const position of [positions[0], positions.at(-1)]) {
-        aerialways.entities.add({
-          parent: entity,
-          name: entity.name,
-          description: entity.description,
-          position,
-          point: {
-            color: lineColor,
-            pixelSize: 11,
-            outlineColor: endpointOutline,
-            outlineWidth: 2,
-            heightReference: Cesium.HeightReference.CLAMP_TO_TERRAIN,
-          },
-        });
-      }
     }
 
     options.innerHTML = Array.from(aerialwayStyles)
