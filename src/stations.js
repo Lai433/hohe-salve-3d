@@ -1,26 +1,34 @@
 import * as Cesium from "cesium";
 
+const pointColor = Cesium.Color.fromCssColorString("#16a34a");
+const pointOutline = Cesium.Color.fromCssColorString("#14532d");
+
 export async function loadStations(viewer, objectControls) {
-  const panel = document.createElement("details");
-  panel.className = "layer-filters station-controls";
-  panel.open = true;
+  const panel = document.createElement("div");
+  panel.className = "layer-controls";
   panel.innerHTML = `
-    <summary>Station</summary>
-    <div class="layer-filter-options">
-      <label><input type="checkbox" data-layer="station-points" checked> Punkte</label>
-      <output role="status">Stationspunkte werden geladen …</output>
-    </div>
+    <label><input type="checkbox" data-layer="stations" checked> Station</label>
+    <details class="layer-filters">
+      <summary id="station-type-heading">Stationsarten</summary>
+      <div class="layer-filter-options" role="group" aria-labelledby="station-type-heading">
+        <label>
+          <input type="checkbox" data-layer="station-points" checked>
+          <span class="station-point" style="background-color: ${pointColor.toCssColorString()}" aria-hidden="true"></span>
+          Punkte
+        </label>
+      </div>
+    </details>
+    <output role="status">Stationspunkte werden geladen …</output>
   `;
   objectControls.append(panel);
 
-  const toggle = panel.querySelector('[data-layer="station-points"]');
+  const stationToggle = panel.querySelector('[data-layer="stations"]');
+  const pointsToggle = panel.querySelector('[data-layer="station-points"]');
   const status = panel.querySelector("output");
   try {
     const points = await Cesium.GeoJsonDataSource.load(
       `${import.meta.env.BASE_URL}data/station_punkte.geojson`,
       {
-        markerColor: Cesium.Color.fromCssColorString("#d97706"),
-        markerSize: 24,
         clampToGround: true,
         credit: new Cesium.Credit(
           '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a>',
@@ -29,14 +37,23 @@ export async function loadStations(viewer, objectControls) {
       },
     );
     points.name = "Liftstationspunkte";
-    points.show = toggle.checked;
+    for (const entity of points.entities.values) {
+      entity.billboard = undefined;
+      entity.point = new Cesium.PointGraphics({
+        color: pointColor,
+        pixelSize: 11,
+        outlineColor: pointOutline,
+        outlineWidth: 2,
+        heightReference: Cesium.HeightReference.CLAMP_TO_TERRAIN,
+      });
+    }
     await viewer.dataSources.add(points);
 
     const update = () => {
-      points.show = toggle.checked;
+      points.show = stationToggle.checked && pointsToggle.checked;
       viewer.scene.requestRender();
     };
-    toggle.addEventListener("change", update);
+    panel.addEventListener("change", update);
     update();
     status.textContent = `Geladen: ${points.entities.values.length} Stationspunkte.`;
   } catch (error) {

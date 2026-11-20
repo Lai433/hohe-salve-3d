@@ -53,10 +53,6 @@ body {
   cursor: pointer;
 }
 
-.station-controls {
-  margin-inline-start: 0;
-}
-
 .layer-filter-options {
   display: grid;
   gap: 6px;
@@ -89,6 +85,13 @@ body {
   height: 6px;
   flex: none;
   border-radius: 3px;
+}
+
+.station-point {
+  width: 11px;
+  height: 11px;
+  flex: none;
+  border-radius: 50%;
 }
 
 .object-controls output {
