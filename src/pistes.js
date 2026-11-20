@@ -42,7 +42,7 @@ export async function loadPistes(viewer, panel) {
     const time = viewer.clock.currentTime;
     for (const entity of polygons.entities.values) {
       entity.name = `${entity.properties?.ref?.getValue(time) ?? "–"} · ${entity.properties?.name?.getValue(time) ?? "Piste"}`;
-      entity.polygon.material = Cesium.Color.CYAN.withAlpha(0.85);
+      entity.polygon.material = Cesium.Color.CYAN.withAlpha(0.9);
       entity.polygon.outline = false;
       entity.polygon.classificationType = Cesium.ClassificationType.TERRAIN;
       entity.polygon.zIndex = 0;
@@ -64,6 +64,9 @@ export async function loadPistes(viewer, panel) {
     }
     await viewer.dataSources.add(polygons);
     await viewer.dataSources.add(lines);
+    // Keep both piste layers below the lifts even when the lifts load first.
+    viewer.dataSources.lowerToBottom(lines);
+    viewer.dataSources.lowerToBottom(polygons);
     const update = () => {
       lines.show = panel.querySelector('[data-layer="lines"]').checked;
       polygons.show = panel.querySelector('[data-layer="polygons"]').checked;

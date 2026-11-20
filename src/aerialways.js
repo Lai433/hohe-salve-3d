@@ -4,7 +4,7 @@ const aerialwayStyles = new Map([
   ["gondola", { label: "Gondelbahn", color: "#006b4f" }],
   ["chair_lift", { label: "Sessellift", color: "#238636" }],
   ["platter", { label: "Tellerlift", color: "#759c18" }],
-  ["magic_carpet", { label: "Zauberteppich", color: "#49bd8d" }],
+  ["magic_carpet", { label: "Zauberteppich", color: "#52b82c" }],
   ["other", { label: "Sonstige / ohne Angabe", color: "#365848" }],
 ]);
 
