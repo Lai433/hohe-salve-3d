@@ -65,6 +65,19 @@ body {
   flex: none;
   border: 1px solid #d3dfeb;
   border-radius: 2px;
+  background-color: var(--piste-color);
+}
+
+.piste-color-dashed {
+  width: 26px;
+  height: 4px;
+  border: 0;
+  border-radius: 0;
+  background: repeating-linear-gradient(
+    to right,
+    var(--piste-color) 0 6px,
+    transparent 6px 10px
+  );
 }
 
 .aerialway-line {

@@ -5,7 +5,7 @@ const difficulties = new Map([
   ["intermediate", { label: "Mittelschwer", color: Cesium.Color.RED }],
   ["advanced", { label: "Schwer", color: Cesium.Color.BLACK }],
   ["novice", { label: "Anfänger", color: Cesium.Color.GREEN }],
-  ["freeride", { label: "Freeride", color: Cesium.Color.YELLOW }],
+  ["freeride", { label: "Freeride", color: Cesium.Color.RED, dashed: true }],
   ["other", { label: "Sonstige / ohne Angabe", color: Cesium.Color.YELLOW }],
 ]);
 
@@ -15,10 +15,10 @@ export async function loadPistes(viewer, panel) {
     <details class="layer-filters">
       <summary id="piste-difficulty-heading">Schwierigkeit der Pistenlinien</summary>
       <div class="layer-filter-options" role="group" aria-labelledby="piste-difficulty-heading">
-        ${Array.from(difficulties, ([value, { label, color }]) => `
+        ${Array.from(difficulties, ([value, { label, color, dashed }]) => `
           <label>
             <input type="checkbox" data-difficulty="${value}" checked>
-            <span class="piste-color" style="background-color: ${color.toCssColorString()}" aria-hidden="true"></span>
+            <span class="piste-color${dashed ? " piste-color-dashed" : ""}" style="--piste-color: ${color.toCssColorString()}" aria-hidden="true"></span>
             ${label}
           </label>
         `).join("")}
@@ -55,7 +55,10 @@ export async function loadPistes(viewer, panel) {
       entity.name = `${entity.properties?.ref?.getValue(time) ?? "–"} · ${entity.properties?.name?.getValue(time) ?? "Piste"}`;
       entity.polyline.clampToGround = true;
       entity.polyline.width = 3;
-      entity.polyline.material = difficulties.get(difficulty).color;
+      const { color, dashed } = difficulties.get(difficulty);
+      entity.polyline.material = dashed
+        ? new Cesium.PolylineDashMaterialProperty({ color })
+        : color;
       entity.polyline.classificationType = Cesium.ClassificationType.TERRAIN;
       entity.polyline.zIndex = 1;
     }

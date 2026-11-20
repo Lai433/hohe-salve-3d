@@ -1,51 +1,11 @@
 import * as Cesium from "cesium";
 
-const gradient = new Cesium.Material({
-  fabric: {
-    type: "AerialwayGradient",
-    uniforms: {
-      startColor: Cesium.Color.DARKGREEN,
-      endColor: Cesium.Color.LIMEGREEN,
-    },
-    components: {
-      diffuse:
-        "mix(startColor.rgb, endColor.rgb, clamp(materialInput.st.s, 0.0, 1.0))",
-    },
-  },
-});
-gradient.translucent = false;
-
-function liftStyle(label, start, end) {
-  const startColor = Cesium.Color.fromCssColorString(start);
-  const endColor = Cesium.Color.fromCssColorString(end);
-  return {
-    label,
-    start,
-    end,
-    startColor,
-    endColor,
-    material: {
-      isConstant: true,
-      definitionChanged: new Cesium.Event(),
-      getType: () => gradient.type,
-      getValue(_time, result = {}) {
-        result.startColor = startColor;
-        result.endColor = endColor;
-        return result;
-      },
-      equals(other) {
-        return this === other;
-      },
-    },
-  };
-}
-
 const aerialwayStyles = new Map([
-  ["gondola", liftStyle("Gondelbahn", "#064e3b", "#10b981")],
-  ["chair_lift", liftStyle("Sessellift", "#166534", "#4ade80")],
-  ["platter", liftStyle("Tellerlift", "#3f6212", "#a3cf36")],
-  ["magic_carpet", liftStyle("Zauberteppich", "#047857", "#6ee7b7")],
-  ["other", liftStyle("Sonstige / ohne Angabe", "#365848", "#90b99a")],
+  ["gondola", { label: "Gondelbahn", color: "#006b4f" }],
+  ["chair_lift", { label: "Sessellift", color: "#238636" }],
+  ["platter", { label: "Tellerlift", color: "#759c18" }],
+  ["magic_carpet", { label: "Zauberteppich", color: "#49bd8d" }],
+  ["other", { label: "Sonstige / ohne Angabe", color: "#365848" }],
 ]);
 
 const endpointOutline = Cesium.Color.fromCssColorString("#052e16");
@@ -80,27 +40,25 @@ export async function loadAerialways(viewer, panel) {
       }
       const value = entity.properties?.aerialway?.getValue(time);
       const type = aerialwayStyles.has(value) ? value : "other";
-      const { label, material, startColor, endColor } = aerialwayStyles.get(type);
+      const { label, color } = aerialwayStyles.get(type);
+      const lineColor = Cesium.Color.fromCssColorString(color);
       types.add(type);
       lineTypes.set(entity, type);
       entity.name = entity.properties?.name?.getValue(time) || label;
       entity.polyline.width = 6;
-      entity.polyline.material = material;
+      entity.polyline.material = lineColor;
       entity.polyline.classificationType = Cesium.ClassificationType.TERRAIN;
       entity.polyline.zIndex = 2;
 
       const positions = entity.polyline.positions.getValue(time);
-      for (const [position, color] of [
-        [positions[0], startColor],
-        [positions.at(-1), endColor],
-      ]) {
+      for (const position of [positions[0], positions.at(-1)]) {
         aerialways.entities.add({
           parent: entity,
           name: entity.name,
           description: entity.description,
           position,
           point: {
-            color,
+            color: lineColor,
             pixelSize: 11,
             outlineColor: endpointOutline,
             outlineWidth: 2,
@@ -113,10 +71,10 @@ export async function loadAerialways(viewer, panel) {
     options.innerHTML = Array.from(aerialwayStyles)
       .filter(([type]) => types.has(type))
       .map(
-        ([type, { label, start, end }]) => `
+        ([type, { label, color }]) => `
           <label>
             <input type="checkbox" data-aerialway-type="${type}" checked>
-            <span class="aerialway-line" style="background: linear-gradient(to right, ${start}, ${end})" aria-hidden="true"></span>
+            <span class="aerialway-line" style="background-color: ${color}" aria-hidden="true"></span>
             ${label}
           </label>
         `,
