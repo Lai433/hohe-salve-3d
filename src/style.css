@@ -68,9 +68,10 @@ body {
 }
 
 .aerialway-line {
-  width: 20px;
+  width: 24px;
+  height: 6px;
   flex: none;
-  border-top: 3px dashed currentColor;
+  border-radius: 3px;
 }
 
 .object-controls output {
