@@ -5,6 +5,7 @@ import { loadPistes } from "./pistes.js";
 import { loadAerialways } from "./aerialways.js";
 import { loadStations } from "./stations.js";
 import { loadRestaurants } from "./restaurants.js";
+import { setupCameraViews } from "./cameraViews.js";
 
 const { VITE_CESIUM_ION_TOKEN } = import.meta.env;
 if (VITE_CESIUM_ION_TOKEN) {
@@ -42,19 +43,15 @@ viewer.entities.add({
   },
 });
 
-viewer.camera.lookAt(
+setupCameraViews(
+  viewer,
   Cesium.Cartesian3.fromDegrees(
     summit.longitude,
     summit.latitude,
     summit.cameraTargetHeight,
   ),
-  new Cesium.HeadingPitchRange(
-    Cesium.Math.toRadians(25),
-    Cesium.Math.toRadians(-30),
-    3200,
-  ),
+  document.querySelector(".interaction-controls"),
 );
-viewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
 
 loadPistes(viewer, document.querySelector("#piste-controls"));
 loadAerialways(viewer, document.querySelector("#aerialway-controls"));

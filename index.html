@@ -1,7 +1,8 @@
 <!doctype html>
-<html lang="en">
+<html lang="de">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body>
     <div id="cesiumContainer"></div>
@@ -9,6 +10,20 @@
       <h2 id="object-controls-heading">Objekte auswählen</h2>
       <div id="piste-controls" class="layer-controls"></div>
       <div id="aerialway-controls" class="layer-controls"></div>
+    </section>
+    <section class="interaction-controls" aria-labelledby="interaction-heading">
+      <h2 id="interaction-heading">Interaktionsfunktionen</h2>
+      <div
+        class="camera-views"
+        role="group"
+        aria-labelledby="camera-views-heading"
+      >
+        <h3 id="camera-views-heading">Ansicht</h3>
+        <button type="button" data-camera-view="default">
+          Standardansicht
+        </button>
+        <button type="button" data-camera-view="top">Draufsicht</button>
+      </div>
     </section>
     <script type="module" src="/src/main.js"></script>
   </body>

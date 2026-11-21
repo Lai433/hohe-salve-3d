@@ -1,4 +1,5 @@
 {
   "root": true,
-  "extends": ["cesium/node"]
+  "extends": ["cesium/node"],
+  "overrides": [{ "files": ["index.html"], "plugins": ["html"] }]
 }

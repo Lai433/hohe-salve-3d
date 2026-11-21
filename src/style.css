@@ -25,9 +25,98 @@ body {
   font: 14px sans-serif;
 }
 
-.object-controls h2 {
+.object-controls h2,
+.interaction-controls h2 {
   margin: 0;
   font-size: 16px;
+}
+
+.interaction-controls {
+  position: fixed;
+  top: 50%;
+  right: 12px;
+  z-index: 10;
+  transform: translateY(-50%);
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 4px;
+  background: #20242cef;
+  color: white;
+  font: 14px sans-serif;
+}
+
+.camera-views {
+  display: grid;
+  gap: 6px;
+}
+
+.camera-views h3 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.camera-views button {
+  border: 1px solid #667484;
+  border-radius: 4px;
+  padding: 7px 10px;
+  background: #343d49;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.camera-views button:hover {
+  background: #45566a;
+}
+
+.camera-views button:focus-visible {
+  outline: 2px solid #a6d4ff;
+  outline-offset: 2px;
+}
+
+/* Cesium opens its native panels along the right edge of the canvas. */
+body:has(.cesium-infoBox-visible, .cesium-baseLayerPicker-dropDown-visible)
+  .interaction-controls {
+  right: max(358px, calc(min(40vw, 480px) + 14px));
+}
+
+@media (max-height: 760px) {
+  body:has(.cesium-navigation-help-visible)
+    .interaction-controls {
+    right: max(358px, calc(min(40vw, 480px) + 14px));
+  }
+}
+
+@media (max-width: 899px) {
+  body:has(
+    .cesium-infoBox-visible,
+    .cesium-baseLayerPicker-dropDown-visible
+  ) .interaction-controls {
+    visibility: hidden;
+  }
+}
+
+@media (561px <= width <= 899px) and (max-height: 760px),
+  (max-width: 560px) and (max-height: 500px) {
+  body:has(.cesium-navigation-help-visible) .interaction-controls {
+    visibility: hidden;
+  }
+}
+
+@media (max-width: 560px) {
+  .object-controls {
+    max-height: max(80px, calc(100dvh - 280px));
+  }
+
+  .interaction-controls,
+  body:has(.cesium-navigation-help-visible) .interaction-controls {
+    top: auto;
+    right: 12px;
+    bottom: 36px;
+    transform: none;
+  }
 }
 
 .layer-controls {
