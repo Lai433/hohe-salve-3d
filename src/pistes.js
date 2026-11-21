@@ -11,6 +11,51 @@ const difficulties = new Map([
   ["other", { label: "Sonstige / ohne Angabe", color: Cesium.Color.YELLOW }],
 ]);
 
+function getLineMidpoint(positions) {
+  const lengths = positions.slice(1).map((position, index) =>
+    Cesium.Cartesian3.distance(positions[index], position),
+  );
+  let remaining = lengths.reduce((total, length) => total + length, 0) / 2;
+  for (const [index, length] of lengths.entries()) {
+    if (length > 0 && remaining <= length) {
+      return Cesium.Cartesian3.lerp(
+        positions[index],
+        positions[index + 1],
+        remaining / length,
+        new Cesium.Cartesian3(),
+      );
+    }
+    remaining -= length;
+  }
+  return positions[0];
+}
+
+function makePisteCodeImage(code, color) {
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+  const font = "bold 28px sans-serif";
+  context.font = font;
+  const diameter = Math.max(60, Math.ceil(context.measureText(code).width) + 20);
+  canvas.width = diameter;
+  canvas.height = diameter;
+
+  const center = diameter / 2;
+  context.beginPath();
+  context.arc(center, center, center - 2, 0, Cesium.Math.TWO_PI);
+  context.fillStyle = color.toCssColorString();
+  context.fill();
+  context.font = font;
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  context.lineJoin = "round";
+  context.lineWidth = 3;
+  context.strokeStyle = "rgba(0, 0, 0, 0.7)";
+  context.strokeText(code, center, center);
+  context.fillStyle = "white";
+  context.fillText(code, center, center);
+  return canvas;
+}
+
 export async function loadPistes(viewer, panel) {
   panel.innerHTML = `
     <label><input type="checkbox" data-layer="lines" checked> Pistenlinien</label>
@@ -58,7 +103,8 @@ export async function loadPistes(viewer, panel) {
       const value = entity.properties?.["piste:difficulty"]?.getValue(time);
       const difficulty = difficulties.has(value) ? value : "other";
       lineDifficulties.set(entity, difficulty);
-      entity.name = `${entity.properties?.ref?.getValue(time) ?? "–"} · ${entity.properties?.name?.getValue(time) ?? "Piste"}`;
+      const ref = entity.properties?.ref?.getValue(time);
+      entity.name = `${ref ?? "–"} · ${entity.properties?.name?.getValue(time) ?? "Piste"}`;
       entity.polyline.clampToGround = true;
       entity.polyline.width = 3;
       const { color, dashed } = difficulties.get(difficulty);
@@ -67,6 +113,15 @@ export async function loadPistes(viewer, panel) {
         : color;
       entity.polyline.classificationType = Cesium.ClassificationType.TERRAIN;
       entity.polyline.zIndex = 1;
+      const code = String(ref ?? "").split(",", 1)[0].trim();
+      if (code) {
+        entity.position = getLineMidpoint(entity.polyline.positions.getValue(time));
+        entity.billboard = new Cesium.BillboardGraphics({
+          image: makePisteCodeImage(code, color),
+          scale: 0.5,
+          heightReference: Cesium.HeightReference.CLAMP_TO_TERRAIN,
+        });
+      }
     }
     await viewer.dataSources.add(polygons);
     await viewer.dataSources.add(lines);
