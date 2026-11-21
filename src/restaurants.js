@@ -4,6 +4,27 @@ import { styleBuildings } from "./buildings.js";
 const roofColor = Cesium.Color.fromCssColorString("#facc15");
 const wallColor = Cesium.Color.fromCssColorString("#d4a508");
 
+function makeRestaurantBadge() {
+  const canvas = document.createElement("canvas");
+  canvas.width = 64;
+  canvas.height = 64;
+  const context = canvas.getContext("2d");
+  context.fillStyle = roofColor.toCssColorString();
+  context.fillRect(0, 0, canvas.width, canvas.height);
+
+  const fork = new Path2D("M15 14v12a8 8 0 0 0 16 0V14 M23 14v36");
+  const knife = new Path2D("M46 50V14c-6 4-10 13-10 23h10");
+  context.lineCap = "round";
+  context.lineJoin = "round";
+  for (const [color, width] of [["#806400", 7], ["white", 4]]) {
+    context.strokeStyle = color;
+    context.lineWidth = width;
+    context.stroke(fork);
+    context.stroke(knife);
+  }
+  return canvas;
+}
+
 export async function loadRestaurants(viewer, objectControls) {
   const panel = document.createElement("div");
   panel.className = "layer-controls";
@@ -32,7 +53,16 @@ export async function loadRestaurants(viewer, objectControls) {
     );
     restaurants.name = "Restaurants";
     const count = restaurants.entities.values.length;
-    styleBuildings(viewer, restaurants, { roofColor, wallColor });
+    styleBuildings(viewer, restaurants, {
+      roofColor,
+      wallColor,
+      billboard: {
+        image: makeRestaurantBadge(),
+        scale: 0.5,
+        heightReference: Cesium.HeightReference.RELATIVE_TO_TERRAIN,
+        pixelOffset: new Cesium.Cartesian2(24, -8),
+      },
+    });
     restaurants.show = toggle.checked;
     await viewer.dataSources.add(restaurants);
 

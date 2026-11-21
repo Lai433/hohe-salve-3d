@@ -1,6 +1,7 @@
 import * as Cesium from "cesium";
 
 const buildingHeight = 10;
+const markerHeight = buildingHeight + 3;
 
 function footprintCenter(vertices) {
   const origin = vertices[0];
@@ -32,7 +33,7 @@ function updateElevationLabel(footprint, center, height) {
   entity.position = Cesium.Cartesian3.fromRadians(
     center.longitude,
     center.latitude,
-    (hasHeight ? height : 0) + buildingHeight + 3,
+    (hasHeight ? height : 0) + markerHeight,
   );
   entity.label.heightReference = hasHeight
     ? Cesium.HeightReference.NONE
@@ -84,7 +85,11 @@ function createRoof(ring, samples, wallColor) {
   );
 }
 
-export function styleBuildings(viewer, buildings, { roofColor, wallColor, showElevationLabel = false }) {
+export function styleBuildings(
+  viewer,
+  buildings,
+  { roofColor, wallColor, showElevationLabel = false, billboard },
+) {
   const time = viewer.clock.currentTime;
   const { entities } = buildings;
   const samples = [];
@@ -96,10 +101,19 @@ export function styleBuildings(viewer, buildings, { roofColor, wallColor, showEl
     entity.polygon.classificationType = Cesium.ClassificationType.TERRAIN;
     const hierarchy = entity.polygon.hierarchy.getValue(time);
     const footprint = prepareRing(hierarchy, entity, entities, samples);
-    if (showElevationLabel && name?.trim()) {
-      const { firstSample, size } = footprint;
-      const center = footprintCenter(samples.slice(firstSample, firstSample + size));
-      footprint.labelName = name.trim();
+    const labelName = showElevationLabel ? name?.trim() : undefined;
+    if (!labelName && !billboard) {
+      return footprint;
+    }
+
+    const { firstSample, size } = footprint;
+    const center = footprintCenter(samples.slice(firstSample, firstSample + size));
+    if (billboard) {
+      entity.position = Cesium.Cartesian3.fromRadians(center.longitude, center.latitude, markerHeight);
+      entity.billboard = billboard;
+    }
+    if (labelName) {
+      footprint.labelName = labelName;
       footprint.centerSample = samples.push(center) - 1;
       entity.label = new Cesium.LabelGraphics({
         font: "bold 15px sans-serif",

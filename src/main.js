@@ -14,6 +14,7 @@ if (VITE_CESIUM_ION_TOKEN) {
 const summit = {
   longitude: 12.203309,
   latitude: 47.465002,
+  elevation: 1829,
   cameraTargetHeight: 2000,
 };
 
@@ -29,7 +30,7 @@ const viewer = new Cesium.Viewer("cesiumContainer", {
 viewer.entities.add({
   position: Cesium.Cartesian3.fromDegrees(summit.longitude, summit.latitude),
   label: {
-    text: "Hohe Salve",
+    text: `Hohe Salve · ${summit.elevation} m`,
     font: "bold 20px sans-serif",
     fillColor: Cesium.Color.WHITE,
     outlineColor: Cesium.Color.BLACK,
