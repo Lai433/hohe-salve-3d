@@ -101,8 +101,11 @@ export function setupObjectInfo(viewer, toggle, hint, popup) {
     );
     const above = y - popup.offsetHeight - 12;
     const top = above >= 48 ? above : y + 12;
-    popup.style.left = `${left}px`;
-    popup.style.top = `${Math.max(48, Math.min(top, window.innerHeight - popup.offsetHeight - 32))}px`;
+    popup.style.setProperty("--object-info-left", `${left}px`);
+    popup.style.setProperty(
+      "--object-info-top",
+      `${Math.max(48, Math.min(top, window.innerHeight - popup.offsetHeight - 32))}px`,
+    );
     unsubscribe = entity.definitionChanged.addEventListener(
       (_entity, property) => {
         if (property === "isShowing" && !entity.isShowing) {
@@ -126,4 +129,5 @@ export function setupObjectInfo(viewer, toggle, hint, popup) {
       setEnabled(false);
     }
   });
+  return close;
 }

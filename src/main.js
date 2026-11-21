@@ -7,6 +7,7 @@ import { loadStations } from "./stations.js";
 import { loadRestaurants } from "./restaurants.js";
 import { setupCameraViews } from "./cameraViews.js";
 import { setupObjectInfo } from "./objectInfo.js";
+import { mobileMapLayout, setupMobilePanels } from "./mobilePanels.js";
 
 const { VITE_CESIUM_ION_TOKEN } = import.meta.env;
 if (VITE_CESIUM_ION_TOKEN) {
@@ -27,6 +28,7 @@ const viewer = new Cesium.Viewer("cesiumContainer", {
   terrain,
   animation: false,
   timeline: false,
+  navigationInstructionsInitiallyVisible: !mobileMapLayout.matches,
 });
 
 viewer.entities.add({
@@ -44,6 +46,7 @@ viewer.entities.add({
   },
 });
 
+const interactions = document.querySelector(".interaction-controls");
 setupCameraViews(
   viewer,
   Cesium.Cartesian3.fromDegrees(
@@ -51,13 +54,19 @@ setupCameraViews(
     summit.latitude,
     summit.cameraTargetHeight,
   ),
-  document.querySelector(".interaction-controls"),
+  interactions,
 );
-setupObjectInfo(
+const closeObjectInfo = setupObjectInfo(
   viewer,
   document.querySelector("#object-info-toggle"),
   document.querySelector("#object-info-hint"),
   document.querySelector(".object-info"),
+);
+setupMobilePanels(
+  viewer.container,
+  document.querySelector(".mobile-map-dock"),
+  interactions,
+  closeObjectInfo,
 );
 
 loadPistes(viewer, document.querySelector("#piste-controls"));
@@ -121,28 +130,7 @@ const snowMaterial = new Cesium.Material({
   },
 });
 
-const snowCheckbox = document.createElement("input");
-snowCheckbox.type = "checkbox";
-snowCheckbox.checked = true;
-
-const snowControl = document.createElement("label");
-snowControl.style.cssText = `
-  position: fixed;
-  top: 12px;
-  left: 12px;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: 4px;
-  background: #20242c;
-  color: white;
-  font: 14px sans-serif;
-  cursor: pointer;
-`;
-snowControl.append(snowCheckbox, "Simulierter Schnee");
-document.body.append(snowControl);
+const snowCheckbox = document.querySelector("#snow-toggle");
 
 const updateSnow = () => {
   if (!viewer.scene.terrainProvider) {

@@ -2,19 +2,34 @@
 <html lang="de">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
   </head>
   <body>
     <div id="cesiumContainer"></div>
-    <section class="object-controls" aria-labelledby="object-controls-heading">
+    <section
+      id="map-layers"
+      class="object-controls"
+      aria-labelledby="object-controls-heading"
+    >
       <h2 id="object-controls-heading">Objekte auswählen</h2>
+      <label class="snow-control">
+        <input type="checkbox" id="snow-toggle" checked />
+        Simulierter Schnee
+      </label>
       <div id="piste-controls" class="layer-controls"></div>
       <div id="aerialway-controls" class="layer-controls"></div>
     </section>
-    <section class="interaction-controls" aria-labelledby="interaction-heading">
+    <section
+      id="map-interactions"
+      class="interaction-controls"
+      aria-labelledby="interaction-heading"
+    >
       <h2 id="interaction-heading">Interaktionsfunktionen</h2>
       <div
-        class="interaction-group"
+        class="interaction-group camera-views"
         role="group"
         aria-labelledby="camera-views-heading"
       >
@@ -34,24 +49,43 @@
           Objektinfo
         </button>
         <p id="object-info-hint" role="status" hidden>
-          Ein Objekt oder Symbol anklicken.
+          Ein Objekt oder Symbol auswählen.
         </p>
       </div>
-      <a
-        href="https://www.hohe.salve.at/"
-        target="_blank"
-        rel="noopener noreferrer"
+      <div
+        class="interaction-group"
+        role="group"
+        aria-labelledby="more-info-heading"
       >
-        Offizielle Website <span aria-hidden="true">↗</span>
-      </a>
-      <a
-        href="https://www.bergfex.de/w/at/hohe-salve/wetter/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Wetter <span aria-hidden="true">↗</span>
-      </a>
+        <h3 id="more-info-heading">Mehr Infos</h3>
+        <a
+          href="https://www.hohe.salve.at/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Offizielle Website <span aria-hidden="true">↗</span>
+        </a>
+        <a
+          href="https://www.bergfex.de/w/at/hohe-salve/wetter/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Wetter – bergfex <span aria-hidden="true">↗</span>
+        </a>
+      </div>
     </section>
+    <nav class="mobile-map-dock" aria-label="Kartensteuerung">
+      <button type="button" aria-controls="map-layers" aria-expanded="false">
+        Ebenen
+      </button>
+      <button
+        type="button"
+        aria-controls="map-interactions"
+        aria-expanded="false"
+      >
+        Interaktion
+      </button>
+    </nav>
     <section class="object-info" aria-labelledby="object-info-heading" hidden>
       <header>
         <h2 id="object-info-heading"></h2>
