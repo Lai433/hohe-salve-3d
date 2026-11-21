@@ -37,7 +37,11 @@ const stationLayers = [
     file: "station_polygon.geojson",
     color: buildingColor,
     configure: (viewer, layer) =>
-      styleBuildings(viewer, layer, { roofColor: buildingColor, wallColor }),
+      styleBuildings(viewer, layer, {
+        roofColor: buildingColor,
+        wallColor,
+        showElevationLabel: true,
+      }),
   },
 ];
 
