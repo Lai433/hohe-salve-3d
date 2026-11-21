@@ -1,5 +1,7 @@
 import * as Cesium from "cesium";
 
+const polygonColor = Cesium.Color.CYAN.withAlpha(0.9);
+
 const difficulties = new Map([
   ["easy", { label: "Leicht", color: Cesium.Color.BLUE }],
   ["intermediate", { label: "Mittelschwer", color: Cesium.Color.RED }],
@@ -24,7 +26,11 @@ export async function loadPistes(viewer, panel) {
         `).join("")}
       </div>
     </details>
-    <label><input type="checkbox" data-layer="polygons" checked> Pistenflächen</label>
+    <label>
+      <input type="checkbox" data-layer="polygons" checked>
+      <span class="piste-color" style="--piste-color: ${polygonColor.toCssColorString()}" aria-hidden="true"></span>
+      Pistenflächen
+    </label>
     <output role="status">GeoJSON wird geladen …</output>
   `;
   const status = panel.querySelector("output");
@@ -42,7 +48,7 @@ export async function loadPistes(viewer, panel) {
     const time = viewer.clock.currentTime;
     for (const entity of polygons.entities.values) {
       entity.name = `${entity.properties?.ref?.getValue(time) ?? "–"} · ${entity.properties?.name?.getValue(time) ?? "Piste"}`;
-      entity.polygon.material = Cesium.Color.CYAN.withAlpha(0.9);
+      entity.polygon.material = polygonColor;
       entity.polygon.outline = false;
       entity.polygon.classificationType = Cesium.ClassificationType.TERRAIN;
       entity.polygon.zIndex = 0;

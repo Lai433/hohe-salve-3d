@@ -88,12 +88,17 @@ export async function loadStations(viewer, objectControls) {
         update();
         await viewer.dataSources.add(layer);
         viewer.scene.requestRender();
-        return `${count} ${label}`;
+        return { loaded: true, text: `${count} ${label}` };
       } catch (error) {
         console.error(`Failed to load ${file}:`, error);
-        return `${label} konnten nicht geladen werden`;
+        return { loaded: false, text: `${label} konnten nicht geladen werden.` };
       }
     }),
   );
-  status.textContent = messages.join(" / ");
+  const loaded = messages.filter((message) => message.loaded).map((message) => message.text);
+  const failed = messages.filter((message) => !message.loaded).map((message) => message.text);
+  if (loaded.length > 0) {
+    failed.unshift(`Geladen: ${loaded.join(" / ")}.`);
+  }
+  status.textContent = failed.join(" ");
 }
