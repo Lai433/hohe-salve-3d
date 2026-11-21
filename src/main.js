@@ -38,7 +38,7 @@ viewer.entities.add({
     style: Cesium.LabelStyle.FILL_AND_OUTLINE,
     heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
     verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-    pixelOffset: new Cesium.Cartesian2(0, -12),
+    pixelOffset: new Cesium.Cartesian2(0, -48),
   },
 });
 
