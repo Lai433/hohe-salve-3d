@@ -14,7 +14,7 @@
     <section class="interaction-controls" aria-labelledby="interaction-heading">
       <h2 id="interaction-heading">Interaktionsfunktionen</h2>
       <div
-        class="camera-views"
+        class="interaction-group"
         role="group"
         aria-labelledby="camera-views-heading"
       >
@@ -24,12 +24,33 @@
         </button>
         <button type="button" data-camera-view="top">Draufsicht</button>
       </div>
-      <button type="button" id="object-info-toggle" aria-pressed="false">
-        Objektinfo
-      </button>
-      <p id="object-info-hint" role="status" hidden>
-        Ein Objekt oder Symbol anklicken.
-      </p>
+      <div
+        class="interaction-group"
+        role="group"
+        aria-labelledby="object-selection-heading"
+      >
+        <h3 id="object-selection-heading">Objekt</h3>
+        <button type="button" id="object-info-toggle" aria-pressed="false">
+          Objektinfo
+        </button>
+        <p id="object-info-hint" role="status" hidden>
+          Ein Objekt oder Symbol anklicken.
+        </p>
+      </div>
+      <a
+        href="https://www.hohe.salve.at/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Offizielle Website <span aria-hidden="true">↗</span>
+      </a>
+      <a
+        href="https://www.bergfex.de/w/at/hohe-salve/wetter/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Wetter <span aria-hidden="true">↗</span>
+      </a>
     </section>
     <section class="object-info" aria-labelledby="object-info-heading" hidden>
       <header>
