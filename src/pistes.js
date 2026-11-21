@@ -1,5 +1,6 @@
 import * as Cesium from "cesium";
 import { getLineMidpoint } from "./getLineMidpoint.js";
+import { setPolygonLayerVisibility } from "./setPolygonLayerVisibility.js";
 
 const polygonColor = Cesium.Color.CYAN.withAlpha(0.9);
 
@@ -112,7 +113,7 @@ export async function loadPistes(viewer, panel) {
     viewer.dataSources.lowerToBottom(polygons);
     const update = () => {
       lines.show = panel.querySelector('[data-layer="lines"]').checked;
-      polygons.show = panel.querySelector('[data-layer="polygons"]').checked;
+      setPolygonLayerVisibility(polygons, panel.querySelector('[data-layer="polygons"]').checked);
       const selectedDifficulties = new Set(
         Array.from(panel.querySelectorAll("[data-difficulty]:checked"), (input) => input.dataset.difficulty),
       );

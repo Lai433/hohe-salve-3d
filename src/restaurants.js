@@ -1,5 +1,6 @@
 import * as Cesium from "cesium";
 import { styleBuildings } from "./buildings.js";
+import { setPolygonLayerVisibility } from "./setPolygonLayerVisibility.js";
 
 const roofColor = Cesium.Color.fromCssColorString("#facc15");
 const wallColor = Cesium.Color.fromCssColorString("#d4a508");
@@ -63,11 +64,11 @@ export async function loadRestaurants(viewer, objectControls) {
         pixelOffset: new Cesium.Cartesian2(24, -8),
       },
     });
-    restaurants.show = toggle.checked;
+    setPolygonLayerVisibility(restaurants, toggle.checked);
     await viewer.dataSources.add(restaurants);
 
     const update = () => {
-      restaurants.show = toggle.checked;
+      setPolygonLayerVisibility(restaurants, toggle.checked);
       viewer.scene.requestRender();
     };
     toggle.addEventListener("change", update);

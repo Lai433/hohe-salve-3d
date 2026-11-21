@@ -1,5 +1,6 @@
 import * as Cesium from "cesium";
 import { styleBuildings } from "./buildings.js";
+import { setPolygonLayerVisibility } from "./setPolygonLayerVisibility.js";
 
 const pointColor = Cesium.Color.fromCssColorString("#16a34a");
 const pointOutline = Cesium.Color.fromCssColorString("#14532d");
@@ -71,7 +72,7 @@ export async function loadStations(viewer, objectControls) {
   const layers = new Map();
   const update = () => {
     for (const [toggle, layer] of layers) {
-      layer.show = stationToggle.checked && toggle.checked;
+      setPolygonLayerVisibility(layer, stationToggle.checked && toggle.checked);
     }
     viewer.scene.requestRender();
   };

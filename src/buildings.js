@@ -75,6 +75,7 @@ function createRoof(ring, samples, wallColor) {
   );
   const bottom = ground.map(({ height }) => height);
   ring.entity.wall = new Cesium.WallGraphics({
+    show: ring.entity.isShowing,
     positions: [...roof, roof[0]],
     minimumHeights: [...bottom, bottom[0]],
     material: wallColor,
