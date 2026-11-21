@@ -56,7 +56,7 @@ body {
   font-size: 14px;
 }
 
-.camera-views button {
+.interaction-controls button {
   border: 1px solid #667484;
   border-radius: 4px;
   padding: 7px 10px;
@@ -67,13 +67,89 @@ body {
   cursor: pointer;
 }
 
-.camera-views button:hover {
+.interaction-controls button:hover {
   background: #45566a;
 }
 
-.camera-views button:focus-visible {
+.interaction-controls button:focus-visible,
+.object-info button:focus-visible {
   outline: 2px solid #a6d4ff;
   outline-offset: 2px;
+}
+
+.interaction-controls button[aria-pressed="true"] {
+  background: #245b82;
+  border-color: #a6d4ff;
+}
+
+#object-info-hint {
+  margin: 0;
+  color: #d3dfeb;
+  font-size: 12px;
+}
+
+.object-info-active {
+  cursor: crosshair;
+}
+
+.object-info {
+  position: fixed;
+  z-index: 11;
+  box-sizing: border-box;
+  width: min(320px, calc(100vw - 24px));
+  max-height: min(340px, calc(100dvh - 84px));
+  overflow: auto;
+  padding: 12px;
+  border: 1px solid #5984a3;
+  border-radius: 6px;
+  background: #20242c;
+  color: white;
+  font: 14px/1.4 sans-serif;
+  overflow-wrap: anywhere;
+}
+
+.object-info header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.object-info h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.object-info header button {
+  padding: 0 4px;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: inherit;
+  font: 20px/1 sans-serif;
+  cursor: pointer;
+}
+
+.object-info-layer,
+.object-info-empty {
+  margin: 4px 0 0;
+  color: #d3dfeb;
+  font-size: 12px;
+}
+
+.object-info-attributes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: 4px 10px;
+  margin: 8px 0 0;
+}
+
+.object-info-attributes dt {
+  color: #d3dfeb;
+}
+
+.object-info-attributes dd {
+  margin: 0;
 }
 
 /* Cesium opens its native panels along the right edge of the canvas. */
@@ -107,7 +183,7 @@ body:has(.cesium-infoBox-visible, .cesium-baseLayerPicker-dropDown-visible)
 
 @media (max-width: 560px) {
   .object-controls {
-    max-height: max(80px, calc(100dvh - 280px));
+    max-height: max(80px, calc(100dvh - 345px));
   }
 
   .interaction-controls,

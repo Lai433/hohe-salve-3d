@@ -6,6 +6,7 @@ import { loadAerialways } from "./aerialways.js";
 import { loadStations } from "./stations.js";
 import { loadRestaurants } from "./restaurants.js";
 import { setupCameraViews } from "./cameraViews.js";
+import { setupObjectInfo } from "./objectInfo.js";
 
 const { VITE_CESIUM_ION_TOKEN } = import.meta.env;
 if (VITE_CESIUM_ION_TOKEN) {
@@ -51,6 +52,12 @@ setupCameraViews(
     summit.cameraTargetHeight,
   ),
   document.querySelector(".interaction-controls"),
+);
+setupObjectInfo(
+  viewer,
+  document.querySelector("#object-info-toggle"),
+  document.querySelector("#object-info-hint"),
+  document.querySelector(".object-info"),
 );
 
 loadPistes(viewer, document.querySelector("#piste-controls"));

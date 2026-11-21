@@ -24,6 +24,21 @@
         </button>
         <button type="button" data-camera-view="top">Draufsicht</button>
       </div>
+      <button type="button" id="object-info-toggle" aria-pressed="false">
+        Objektinfo
+      </button>
+      <p id="object-info-hint" role="status" hidden>
+        Ein Objekt oder Symbol anklicken.
+      </p>
+    </section>
+    <section class="object-info" aria-labelledby="object-info-heading" hidden>
+      <header>
+        <h2 id="object-info-heading"></h2>
+        <button type="button" aria-label="Objektinfo schließen">×</button>
+      </header>
+      <p class="object-info-layer" hidden></p>
+      <dl class="object-info-attributes"></dl>
+      <p class="object-info-empty" hidden>Keine weiteren Angaben vorhanden.</p>
     </section>
     <script type="module" src="/src/main.js"></script>
   </body>
