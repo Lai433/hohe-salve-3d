@@ -1,4 +1,5 @@
 import * as Cesium from "cesium";
+import { getLineMidpoint } from "./getLineMidpoint.js";
 
 const polygonColor = Cesium.Color.CYAN.withAlpha(0.9);
 
@@ -10,25 +11,6 @@ const difficulties = new Map([
   ["freeride", { label: "Freeride", color: Cesium.Color.RED, dashed: true }],
   ["other", { label: "Sonstige / ohne Angabe", color: Cesium.Color.YELLOW }],
 ]);
-
-function getLineMidpoint(positions) {
-  const lengths = positions.slice(1).map((position, index) =>
-    Cesium.Cartesian3.distance(positions[index], position),
-  );
-  let remaining = lengths.reduce((total, length) => total + length, 0) / 2;
-  for (const [index, length] of lengths.entries()) {
-    if (length > 0 && remaining <= length) {
-      return Cesium.Cartesian3.lerp(
-        positions[index],
-        positions[index + 1],
-        remaining / length,
-        new Cesium.Cartesian3(),
-      );
-    }
-    remaining -= length;
-  }
-  return positions[0];
-}
 
 function makePisteCodeImage(code, color) {
   const canvas = document.createElement("canvas");
